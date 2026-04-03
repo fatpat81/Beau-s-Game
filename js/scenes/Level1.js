@@ -95,6 +95,9 @@ export default class Level1 extends Phaser.Scene {
         dino.isFrozen = true;
         dino.setVelocityX(0); // Stop moving
         dino.setTint(0x00ffff); // Ice blue tint
+        this.time.delayedCall(500, () => {
+        dino.destroy(); 
+    });
         
         // Update score
         this.score += 10;
