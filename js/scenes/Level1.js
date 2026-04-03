@@ -53,7 +53,7 @@ export default class Level1 extends Phaser.Scene {
 
         // Spawn timer for dinosaurs
         this.time.addEvent({
-            delay: 1500, // spawn every 1.5 seconds
+            delay: 4500, // spawn every 1.5 seconds
             callback: this.spawnDino,
             callbackScope: this,
             loop: true
