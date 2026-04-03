@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Beau's Game</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.js"></script>
+</head>
+<body>
+    <div id="game-container"></div>
+    
+    <div id="ui-layer">
+        <div id="score-display">SCORE: <span id="score">0</span></div>
+        <div id="game-over" style="display: none;">
+            <h1>LEVEL COMPLETE!</h1>
+            <h2>Total Frozen Dinos: <span id="final-score">0</span></h2>
+            <h2>Points: <span id="final-points">0</span></h2>
+            <button onclick="location.reload()">Play Again</button>
+        </div>
+
+        <div id="controls">
+            <div id="dpad">
+                <button class="dpad-btn" id="btn-up">W</button>
+                <div class="dpad-row">
+                    <button class="dpad-btn" id="btn-left">A</button>
+                    <button class="dpad-btn" id="btn-down">S</button>
+                    <button class="dpad-btn" id="btn-right">D</button>
+                </div>
+            </div>
+            
+            <div id="action-container">
+                <button id="btn-action">FIRE</button>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
