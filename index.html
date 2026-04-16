@@ -17,16 +17,12 @@
             <h2>Total Frozen Dinos: <span id="final-score">0</span></h2>
             <h2>Points: <span id="final-points">0</span></h2>
             <button onclick="location.reload()">Play Again</button>
+            <button id="btn-next-level" style="display: none;">Next Level</button>
         </div>
 
         <div id="controls">
-            <div id="dpad">
-                <button class="dpad-btn" id="btn-up">W</button>
-                <div class="dpad-row">
-                    <button class="dpad-btn" id="btn-left">A</button>
-                    <button class="dpad-btn" id="btn-down">S</button>
-                    <button class="dpad-btn" id="btn-right">D</button>
-                </div>
+            <div id="joystick-zone">
+                <div id="joystick-knob"></div>
             </div>
             
             <div id="action-container">

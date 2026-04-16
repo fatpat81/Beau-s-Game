@@ -83,32 +83,29 @@ body, html {
     pointer-events: none;
 }
 
-/* D-PAD */
-#dpad {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    pointer-events: auto;
-}
-
-.dpad-row {
-    display: flex;
-}
-
-.dpad-btn {
-    width: 60px;
-    height: 60px;
-    margin: 5px;
+/* JOYSTICK */
+#joystick-zone {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-    backdrop-filter: blur(4px);
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    pointer-events: auto;
+    touch-action: none;
+    margin-bottom: 20px;
 }
-.dpad-btn:active, .dpad-btn.active {
-    background: rgba(0, 255, 255, 0.6);
+
+#joystick-knob {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0, 255, 255, 0.8);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
 }
 
 /* ACTION BUTTON */

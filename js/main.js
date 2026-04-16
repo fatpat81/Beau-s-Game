@@ -1,5 +1,6 @@
 import BootScene from './scenes/BootScene.js';
-import Level1 from './scenes/Level1.js';
+import TitleScene from './scenes/TitleScene.js';
+import Level from './scenes/Level.js';
 
 // Global input state bridged from DOM layer
 window.gameInput = {
@@ -22,11 +23,11 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 1500 }, // Ensure character returns to ground smoothly
+            gravity: { y: 0 }, 
             debug: false
         }
     },
-    scene: [BootScene, Level1]
+    scene: [BootScene, TitleScene, Level]
 };
 
 const game = new Phaser.Game(config);
@@ -54,11 +55,75 @@ function bindBtn(id, key) {
     btn.addEventListener('mouseleave', release);
 }
 
+// Joystick Logic
+function bindJoystick() {
+    const zone = document.getElementById('joystick-zone');
+    const knob = document.getElementById('joystick-knob');
+    if (!zone || !knob) return;
+
+    let active = false;
+    let originX, originY;
+    const maxRadius = 35;
+
+    const start = (e) => {
+        active = true;
+        const rect = zone.getBoundingClientRect();
+        originX = rect.left + rect.width / 2;
+        originY = rect.top + rect.height / 2;
+        move(e);
+    };
+
+    const move = (e) => {
+        if (!active) return;
+        e.preventDefault();
+        
+        let clientX, clientY;
+        if (e.touches && e.touches.length > 0) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+
+        let deltaX = clientX - originX;
+        let deltaY = clientY - originY;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        
+        if (distance > maxRadius) {
+            const ratio = maxRadius / distance;
+            deltaX *= ratio;
+            deltaY *= ratio;
+        }
+
+        knob.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
+
+        const deadzone = 10;
+        window.gameInput.left = deltaX < -deadzone;
+        window.gameInput.right = deltaX > deadzone;
+        window.gameInput.up = deltaY < -deadzone;
+        window.gameInput.down = deltaY > deadzone;
+    };
+
+    const end = () => {
+        active = false;
+        knob.style.transform = `translate(-50%, -50%)`;
+        window.gameInput.left = false;
+        window.gameInput.right = false;
+        window.gameInput.up = false;
+        window.gameInput.down = false;
+    };
+
+    zone.addEventListener('touchstart', start, {passive: false});
+    zone.addEventListener('touchmove', move, {passive: false});
+    zone.addEventListener('touchend', end);
+    zone.addEventListener('mousedown', start);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-    bindBtn('btn-up', 'up');
-    bindBtn('btn-down', 'down');
-    bindBtn('btn-left', 'left');
-    bindBtn('btn-right', 'right');
+    bindJoystick();
     bindBtn('btn-action', 'fire');
     
     // Add WASD/Arrow key support for testing on Desktop
