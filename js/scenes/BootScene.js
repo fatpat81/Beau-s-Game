@@ -10,6 +10,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('player_sprite', 'assets/player_sprite.png');
         this.load.image('dino', 'assets/dino.png');
         this.load.image('gun', 'assets/gun.png');
+        this.load.image('witch', 'assets/witch.png');
 
         const bgs = [
             'bg_level2_woodland', 'bg_level3_desert', 'bg_level4_arctic', 'bg_level5_toxic',
@@ -75,6 +76,7 @@ export default class BootScene extends Phaser.Scene {
         };
 
         makeTrans('player_sprite');
+        makeTrans('witch');
         
         const allDinos = ['dino', 'dino_trex', 'dino_triceratops', 'dino_stegosaurus', 'dino_pterodactyl', 'dino_velociraptor', 'dino_rob'];
         allDinos.forEach(makeTrans);
@@ -105,6 +107,13 @@ export default class BootScene extends Phaser.Scene {
                  frameRate: 8,
                  repeat: -1
              });
+        });
+
+        this.anims.create({
+             key: `witch_walk`,
+             frames: this.anims.generateFrameNumbers(`witch_trans`) || [{ key: `witch_trans` }],
+             frameRate: 8,
+             repeat: -1
         });
 
         this.anims.create({

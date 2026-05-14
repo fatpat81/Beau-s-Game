@@ -108,6 +108,13 @@ export default class Level extends Phaser.Scene {
         
         let randomDinoKey = dinoKeys[Math.floor(Math.random() * dinoKeys.length)];
         let isRob = false;
+        let isWitch = false;
+
+        // Level 7 custom logic: spawn the Witch occasionally
+        if (this.currentLevel === 7 && Math.random() < 0.4) {
+            randomDinoKey = 'witch_trans';
+            isWitch = true;
+        }
 
         // Level 8 custom logic: spawn the Rob Dinosaur occasionally
         if (this.currentLevel === 8 && Math.random() < 0.3) {
@@ -117,9 +124,12 @@ export default class Level extends Phaser.Scene {
 
         const dino = this.dinos.create(width + 100, spawnY, randomDinoKey);
         dino.isRob = isRob;
+        dino.isWitch = isWitch;
         if (isRob) {
             // Play Rob's basic walk
             try { dino.play('dino_rob_trans_walk'); } catch(e) {}
+        } else if (isWitch) {
+            try { dino.play('witch_walk'); } catch(e) {}
         } else {
             try { dino.play(`${randomDinoKey}_walk`); } catch(e) {}
         }
@@ -134,11 +144,37 @@ export default class Level extends Phaser.Scene {
     }
 
     hitDino(bullet, dino) {
+        if (dino.isMelting) return; // Prevent multiple hits
+        
         if (bullet.emitter) {
             bullet.emitter.stop();
             this.time.delayedCall(500, () => { if (bullet.emitter) bullet.emitter.destroy(); });
         }
         bullet.destroy(); 
+        
+        this.score += 10;
+        document.getElementById('score').innerText = this.score;
+
+        if (dino.isWitch) {
+            dino.isMelting = true;
+            dino.body.checkCollision.none = true;
+            dino.setVelocity(0, 0);
+            
+            // Melting animation
+            this.tweens.add({
+                targets: dino,
+                scaleY: 0,
+                scaleX: dino.scaleX * 1.5,
+                y: dino.y + (dino.displayHeight / 2),
+                alpha: 0,
+                duration: 800,
+                ease: 'Power2',
+                onComplete: () => {
+                    dino.destroy();
+                }
+            });
+            return;
+        }
 
         if (dino.isRob) {
             // Mud explosion for Dino Rob (200% bigger)
@@ -168,9 +204,6 @@ export default class Level extends Phaser.Scene {
         }
 
         dino.destroy(); // Destroy dino completely
-        
-        this.score += 10;
-        document.getElementById('score').innerText = this.score;
     }
 
     update(time, delta) {
